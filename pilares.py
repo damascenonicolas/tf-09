@@ -125,3 +125,27 @@ class Atalho(Item):
 
     def mostrar(self, recuo=""):
         print(f"{recuo}{self.nome} -> {self.__destino.caminho()}")
+
+raiz = Pasta("C:")
+users = Pasta("Users", raiz)
+usuario = Pasta("damascenonicolas", users)
+desktop = Pasta("Desktop", usuario)
+
+arquivo_texto = Arquivo("documento.txt", 500, desktop)
+pasta_projetos = Pasta("Projetos", desktop)
+arquivo_codigo = Arquivo("main.py", 1200, pasta_projetos)
+
+atalho_documento = Atalho("atalho_doc", arquivo_texto, desktop)
+atalho_pasta = Atalho("atalho_projeto", pasta_projetos, desktop)
+
+print("--- ARVORE COMPLETA ---")
+raiz.mostrar()
+
+print("\n--- ESPACO TOTAL ---")
+lista_itens = [arquivo_texto, desktop, Lixeira()]
+print(f"Espaco Total calculado: {espaco_total(lista_itens)} bytes")
+
+print("\n--- TENTATIVAS DE FALHA ---")
+tentar(lambda: setattr(atalho_documento, "destino", arquivo_codigo))
+tentar(lambda: atalho_documento.redirecionar(atalho_documento))
+tentar(lambda: atalho_documento.redirecionar(desktop))
