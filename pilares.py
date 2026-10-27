@@ -95,3 +95,33 @@ def tentar(funcao):
         funcao()
     except Exception as erro:
         print(f"Erro: {erro}")
+
+class Atalho(Item):
+    __slots__ = ["__destino"]
+
+    def __init__(self, nome, destino, pai=None):
+        self.__destino = None
+        super().__init__(nome, pai)
+        self.redirecionar(destino)
+
+    @property
+    def destino(self):
+        return self.__destino
+
+    def redirecionar(self, novo_destino):
+        if novo_destino == self:
+            raise ValueError("Um atalho nao pode apontar para si mesmo")
+        
+        verificador = self.pai
+        while verificador is not None:
+            if verificador == novo_destino:
+                raise ValueError("Um atalho nao pode apontar para uma pasta ancestral")
+            verificador = verificador.pai
+
+        self.__destino = novo_destino
+
+    def tamanho(self):
+        return 1
+
+    def mostrar(self, recuo=""):
+        print(f"{recuo}{self.nome} -> {self.__destino.caminho()}")
